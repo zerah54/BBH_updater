@@ -4,7 +4,7 @@
 // @author       Zerah
 // @version      0.1
 // @match        https://zombvival.de/myhordes/*
-// @match        https://bbh2.fred26.fr/*
+// @match        https://bbh.fred26.fr/*
 // @require      http://userscripts-mirror.org/scripts/source/107941.user.js
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -20,7 +20,7 @@
         const updated = "<img src='/myhordes/build/images/professions/hero.93053174.gif'/>BBH a été mis à jour !"
         let r = document.getElementById('zone-marker');
 
-        if (document.URL.startsWith('https://bbh2.fred26.fr/')) {
+        if (document.URL.startsWith('https://bbh.fred26.fr/')) {
             // Si on est sur le site de BBH, on souscrit à la mise à jour d'une valeur, mise à jour lorsqu'on clique sur le bouton "MaJ BBH"
             GM_addValueChangeListener(updateBBHKey, function (keyName, oldValue, newValue, bRmtTrggrd){
 
