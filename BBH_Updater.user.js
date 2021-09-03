@@ -2,8 +2,10 @@
 // @name         BBH Updater
 // @description  Update BBH from the world beyond
 // @author       Zerah
-// @version      0.2
+// @version      0.3
 // @match        https://zombvival.de/myhordes/*
+// @match        https://myhordes.de/*
+// @match        https://myhordes.eu/*
 // @match        https://bbh.fred26.fr/*
 // @require      http://userscripts-mirror.org/scripts/source/107941.user.js
 // @grant        GM_setValue
