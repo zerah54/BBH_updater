@@ -1,4 +1,4 @@
-# BBH_updater
+# BBH & Gh Updater
 
 Ce fichier contient un script Tampermonkey.
 Pour le faire fonctionner, il faut que Tampermonkey soit installé sur votre navigateur. 
