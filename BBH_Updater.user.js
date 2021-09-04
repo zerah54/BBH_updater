@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         BBH & GH Updater
+// @name         BBH & GH Updater Test
 // @description  Update BBH from the world beyond
 // @author       Zerah
-// @version      0.4
+// @version      1.0
 // @match        https://zombvival.de/myhordes/*
 // @match        https://myhordes.de/*
 // @match        https://myhordes.eu/*
@@ -63,7 +63,7 @@
                 let updater_bloc = document.createElement("div");
                 el.appendChild(updater_bloc);
                 let updater_title = document.createElement("h5");
-                updater_title.innerHTML = "BBH & GH Updater";
+                updater_title.innerHTML = "BBH & GH Updater ";
                 updater_bloc.appendChild(updater_title);
 
                 const bbh_update_url = "https://bbh.fred26.fr/update.php";
@@ -137,6 +137,27 @@
                 if(!user_key) {
                     // Si la user_key n'a jamais été renseignée
 
+                    // CREATION DU BOUTON D'AIDE \\
+                    let help_button = document.createElement("a");
+                    help_button.innerHTML = "Aide";
+                    help_button.classList.add("help-button");
+
+                    let help_tooltip = document.createElement("div")
+                    help_tooltip.setAttribute("style", "display: none");
+                    help_tooltip.classList.add("tooltip");
+                    help_tooltip.classList.add("help");
+                    help_tooltip.innerHTML = "Vous devez renseigner votre ID externe pour les apps.<br />Celle-ci se trouve dans \"Votre âme\" > \"Réglages\" > section \"Applications externes\""
+                    help_button.appendChild(help_tooltip);
+
+                    help_button.addEventListener("mouseenter", function() {
+                    help_tooltip.setAttribute("style", "display: block; text-transform: initial");
+                    })
+                    help_button.addEventListener("mouseleave", function() {
+                        help_tooltip.setAttribute("style", "display: none");
+                    })
+                    updater_title.appendChild(help_button);
+                    // FIN DE LA CREATION DU BOUTON D'AIDE \\
+
                     // On crée un input pour saisir la user_key
                     let keytext = document.createElement("input");
                     keytext.setAttribute("type","text");
@@ -163,6 +184,8 @@
                                     // Si la mise à jour est un succès, alors on retire ce qui est spécifique au user_key, et on enregistre la user_key dans le stockage de GM
                                     updater_bloc.removeChild(keytext);
                                     updater_bloc.removeChild(keysend);
+                                    updater_title.removeChild(help_button);
+
                                     GM_setValue(gmUserKey, keytext.value);
                                     user_key = GM_getValue(gmUserKey);
                                     createButton();
