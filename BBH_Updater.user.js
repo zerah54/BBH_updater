@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         BBH & GH Updater Test
+// @name         BBH & GH Updater
 // @description  Update BBH from the world beyond
 // @author       Zerah
 // @version      1.0
