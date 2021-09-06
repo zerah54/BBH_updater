@@ -1,5 +1,7 @@
 # BBH & Gh Updater
 
+Lien de téléchargement : https://github.com/zerah54/BBH_updater/raw/main/BBH_Updater.user.js
+
 Ce fichier contient un script Tampermonkey.
 Pour le faire fonctionner, il faut que Tampermonkey soit installé sur votre navigateur. 
 
