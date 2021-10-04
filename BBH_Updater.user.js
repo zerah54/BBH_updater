@@ -2,7 +2,7 @@
 // @name         BBH & GH Updater
 // @description  Update BBH from the world beyond
 // @author       Zerah
-// @version      1.0
+// @version      1.1
 // @match        https://zombvival.de/myhordes/*
 // @match        https://myhordes.de/*
 // @match        https://myhordes.eu/*
