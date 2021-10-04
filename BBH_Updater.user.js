@@ -25,10 +25,10 @@
     const gmBbhUpdatedKey = "bbh_updated";
     const gmGhUpdatedKey = "gh_updated";
 
-    const start_icon = "<img src='/myhordes/build/images/emotes/arrowright.a107984b.gif'/>";
-    const success_icon = "<img src='/myhordes/build/images/professions/hero.93053174.gif'/>"
-    const pending_icon = "<img src='/myhordes/build/images/emotes/middot.d1d816f1.gif'/>"
-    const error_icon = "<img src='/myhordes/build/images/emotes/warning.27542da7.gif'/>";
+    const start_icon = "<img src='/myhordes/build/images/emotes/arrowright.7870eca6.gif'/>";
+    const success_icon = "<img src='/myhordes/build/images/professions/hero.0cdc29a3.gif'/>"
+    const pending_icon = "<img src='/myhordes/build/images/emotes/middot.d673b4c1.gif'/>"
+    const error_icon = "<img src='/myhordes/build/images/emotes/warning.8e2e7b6f.gif'/>";
 
     const need_update_text = start_icon + "Mettre à jour BBH & GH";
     const updating_text = pending_icon + "Mise à jour de BBH en cours...";
