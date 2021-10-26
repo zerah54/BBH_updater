@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         BBH & GH Updater
-// @description  Update BBH from the world beyond
+// @description  Update BBH & GH
 // @author       Zerah
-// @version      1.2
+// @version      1.3
 // @match        https://zombvival.de/myhordes/*
 // @match        https://myhordes.de/*
 // @match        https://myhordes.eu/*
@@ -33,12 +33,24 @@
 
     const need_update_text = start_icon + "Mettre à jour BBH & GH";
     const updating_text = pending_icon + "Mise à jour de BBH en cours...";
-    const updated_text = "<ul style=\"padding: 0; list-style-type: none;\">"
+    const bbh_success_gh_pending_text = "<ul style=\"padding: 0; list-style-type: none;\">"
     + "<li>" + success_icon + "BBH a été mis à jour !</li>"
     + "<li>" + pending_icon + "Mise à jour de GH en cours...</li>"
     + "</ul>";
+    const bbh_error_gh_pending_text = "<ul style=\"padding: 0; list-style-type: none;\">"
+    + "<li>" + error_icon + "BBH n'a pas pu être mis à jour.</li>"
+    + "<li>" + pending_icon + "Mise à jour de GH en cours...</li>"
+    + "</ul>";
     const both_updated_text = success_icon + "BBH et GH ont été mis à jour !";
-
+    const both_error_text = error_icon + "BBH et GH n'ont pas pu être mis à jour !";
+    const only_gh_updated_text = "<ul style=\"padding: 0; list-style-type: none;\">"
+    + "<li>" + error_icon + "BBH n'a pas pu être mis à jour.</li>"
+    + "<li>" + success_icon + "GH a été mis à jour !</li>"
+    + "</ul>";
+    const only_bbh_updated_text = "<ul style=\"padding: 0; list-style-type: none;\">"
+    + "<li>" + success_icon + "BBH a été mis à jour !</li>"
+    + "<li>" + error_icon + "GH n'a pas pu être mis à jour.</li>"
+    + "</ul>";
     const btn_id = "maj_updater";
 
     if(document.URL.startsWith("https://bbh.fred26.fr/") || document.URL.startsWith("https://gest-hordes2.eragaming.fr/")) {
@@ -103,7 +115,7 @@
                             onload: function(response){
                                 if(response.responseText.indexOf("code=\"ok\"") > -1) {
                                     // Si la réponse est OK, on met à jour le texte
-                                    btn.innerHTML = updated_text;
+                                    btn.innerHTML = bbh_success_gh_pending_text;
                                     GM_setValue(gmBbhUpdatedKey, true);
 
                                     // Puis on met à jour GH
@@ -117,15 +129,32 @@
                                                 GM_setValue(gmGhUpdatedKey, true);
                                             } else {
                                                 // Sinon, on affiche une erreur
-                                                btn.innerHTML = error_icon + "Erreur lors de la mise à jour";
+                                                btn.innerHTML = only_bbh_updated_text;
                                                 console.log(response);
                                             }
                                         }
                                     })
                                 } else {
                                     // Sinon on affiche une erreur
-                                    btn.innerHTML = error_icon + parseErrorResponse(response);
-                                    console.log(response);
+                                    btn.innerHTML = bbh_error_gh_pending_text;
+                                    console.error(response);
+
+                                    // On met à jour GH
+                                    GM_xmlhttpRequest({
+                                        method: "GET",
+                                        url: "https://gest-hordes2.eragaming.fr/?reset=",
+                                        onload: function(response){
+                                            if(response.status === 200) {
+                                                // Si la réponse est OK, on met à jour le texte
+                                                btn.innerHTML = only_gh_updated_text;
+                                                GM_setValue(gmGhUpdatedKey, true);
+                                            } else {
+                                                // Sinon, on affiche une erreur
+                                                btn.innerHTML = both_error_text;
+                                                console.log(response);
+                                            }
+                                        }
+                                    })
                                 }
                             }
                         })
