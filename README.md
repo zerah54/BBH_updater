@@ -1,4 +1,4 @@
-# BBH & Gh Updater
+# BBH, GH & Fata Updater
 
 Lien de téléchargement : https://github.com/zerah54/BBH_updater/raw/main/BBH_Updater.user.js
 
@@ -13,11 +13,11 @@ Le fonctionnement est le suivant :
 
 À noter : 
 
-- Si vous avez BBH ou GH (ou les deux) ouvert(s) dans votre navigateur, vous pouvez faire plusieurs mises à jour à la suite vos onglets ne se rechargeront pas. 
+- Si vous avez BBH ou GH ou Fata (ou les trois) ouvert(s) dans votre navigateur, vous pouvez faire plusieurs mises à jour à la suite vos onglets ne se rechargeront pas. 
 - En revanche, une fois que vous retournerez sur l'un des onglets APRÈS une mise à jour, celui-ci se rechargera automatiquement (afin d'éviter les "oublis" de rechargement).
 
 Attention : 
 - Vous allez d'abord devoir renseigner votre ID d'apps externes
 - Lors de la validation de l'ID d'apps, une confirmation sera demandée. Il faut l'autoriser
-- Lors de la première mise à jour de BBH & GH, une confirmation sera demandée. Il faut l'autoriser. Elle ne vous sera plus redemandée si vous autorisez "toujours"
+- Lors de la première mise à jour de BBH, GH & Fata, une confirmation sera demandée. Il faut l'autoriser. Elle ne vous sera plus redemandée si vous autorisez "toujours"
 
