@@ -1,14 +1,15 @@
 // ==UserScript==
-// @name         BBH & GH Updater
-// @description  Update BBH & GH
+// @name         BBH, GH & Fata Updater
+// @description  Update BBH, GH & Fata
 // @author       Zerah
-// @version      1.3
+// @version      2.0
 // @match        https://zombvival.de/myhordes/*
 // @match        https://myhordes.de/*
 // @match        https://myhordes.eu/*
 // @match        https://myhord.es/*
 // @match        https://bbh.fred26.fr/*
 // @match        https://gest-hordes2.eragaming.fr/*
+// @match        https://fatamorgana.md26.eu/*
 // @require      http://userscripts-mirror.org/scripts/source/107941.user.js
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -20,42 +21,48 @@
     let bbh_updated = false;
     let gh_updated = false;
 
-    const gmUpdate = "update";
-    const gmLastUpdatedKey = "last_updated";
     const gmUserKey = "user_key";
     const gmBbhUpdatedKey = "bbh_updated";
     const gmGhUpdatedKey = "gh_updated";
+    const gmFataUpdatedKey = "fata_updated";
 
     const start_icon = "<img src='/myhordes/build/images/emotes/arrowright.7870eca6.gif'/>";
     const success_icon = "<img src='/myhordes/build/images/professions/hero.0cdc29a3.gif'/>"
     const pending_icon = "<img src='/myhordes/build/images/emotes/middot.d673b4c1.gif'/>"
     const error_icon = "<img src='/myhordes/build/images/emotes/warning.8e2e7b6f.gif'/>";
 
-    const need_update_text = start_icon + "Mettre à jour BBH & GH";
-    const updating_text = pending_icon + "Mise à jour de BBH en cours...";
-    const bbh_success_gh_pending_text = "<ul style=\"padding: 0; list-style-type: none;\">"
-    + "<li>" + success_icon + "BBH a été mis à jour !</li>"
-    + "<li>" + pending_icon + "Mise à jour de GH en cours...</li>"
-    + "</ul>";
-    const bbh_error_gh_pending_text = "<ul style=\"padding: 0; list-style-type: none;\">"
-    + "<li>" + error_icon + "BBH n'a pas pu être mis à jour.</li>"
-    + "<li>" + pending_icon + "Mise à jour de GH en cours...</li>"
-    + "</ul>";
-    const both_updated_text = success_icon + "BBH et GH ont été mis à jour !";
-    const both_error_text = error_icon + "BBH et GH n'ont pas pu être mis à jour !";
-    const only_gh_updated_text = "<ul style=\"padding: 0; list-style-type: none;\">"
-    + "<li>" + error_icon + "BBH n'a pas pu être mis à jour.</li>"
-    + "<li>" + success_icon + "GH a été mis à jour !</li>"
-    + "</ul>";
-    const only_bbh_updated_text = "<ul style=\"padding: 0; list-style-type: none;\">"
-    + "<li>" + success_icon + "BBH a été mis à jour !</li>"
-    + "<li>" + error_icon + "GH n'a pas pu être mis à jour.</li>"
-    + "</ul>";
+    const title = "BBH, GH & Fata Updater ";
+    const need_update_text = start_icon + "Mettre à jour BBH, GH & Fata";
+    const send_key_error_text = "Impossible d'enregistrer la clé";
+
+    const bbh_pending_text = pending_icon + "Mise à jour de BBH en cours...";
+    const bbh_error_text = error_icon + "BBH n'a pas pu être mis à jour.";
+    const bbh_success_text = success_icon + "BBH a été mis à jour !";
+
+    const gh_pending_text = pending_icon + "Mise à jour de GH en cours...";
+    const gh_error_text = error_icon + "GH n'a pas pu être mis à jour.";
+    const gh_success_text = success_icon + "GH a été mis à jour !";
+
+    const fata_pending_text = pending_icon + "Mise à jour de Fata en cours...";
+    const fata_error_text = error_icon + "Fata n'a pas pu être mis à jour.";
+    const fata_success_text = success_icon + "Fata a été mis à jour !";
+
+    const all_updated_text = success_icon + "BBH, GH & Fata ont été mis à jour !";
+    const all_error_text = error_icon + "BBH, GH & Fata n'ont pas pu être mis à jour !";
+
     const btn_id = "maj_updater";
 
-    if(document.URL.startsWith("https://bbh.fred26.fr/") || document.URL.startsWith("https://gest-hordes2.eragaming.fr/")) {
-        const current_key = document.URL.startsWith("https://bbh.fred26.fr/") ? gmBbhUpdatedKey : gmGhUpdatedKey;
-        // Si on est sur le site de BBH ou GH et que BBH ou GH a été mis à jour depuis MyHordes, alors on recharge BBH ou GH au moment de revenir sur l'onglet
+    if(document.URL.startsWith("https://bbh.fred26.fr/") || document.URL.startsWith("https://gest-hordes2.eragaming.fr/") || document.URL.startsWith("https://fatamorgana.md26.eu/")) {
+        let current_key = '';
+        if (document.URL.startsWith("https://bbh.fred26.fr/")) {
+            current_key = gmBbhUpdatedKey
+        } else if (document.URL.startsWith("https://gest-hordes2.eragaming.fr/")) {
+            current_key = gmGhUpdatedKey;
+        } else {
+            current_key = gmFataUpdatedKey;
+        }
+
+        // Si on est sur le site de BBH ou GH ou Fata et que BBH ou GH ou Fata a été mis à jour depuis MyHordes, alors on recharge BBH ou GH ou Fata au moment de revenir sur l'onglet
         document.addEventListener("visibilitychange", function() {
             if (GM_getValue(current_key) && !document.hidden) {
                 GM_setValue(current_key, false);
@@ -76,7 +83,7 @@
                 let updater_bloc = document.createElement("div");
                 el.appendChild(updater_bloc);
                 let updater_title = document.createElement("h5");
-                updater_title.innerHTML = "BBH & GH Updater ";
+                updater_title.innerHTML = title;
                 updater_bloc.appendChild(updater_title);
 
                 const bbh_update_url = "https://bbh.fred26.fr/update.php";
@@ -93,6 +100,62 @@
                     );
                 }
 
+                // met à jour le contenu du bouton
+                let parseButtonDisplay = function(states) {
+                    let display = "<ul style=\"padding: 0; list-style-type: none;\">";
+
+                    if (states) {
+                        states.forEach(state => {
+                            display += "<li>" + state + "</li>";
+                        })
+                    }
+                    display += "</ul>";
+
+                    return display;
+                }
+
+                let updateGh = function (btn, error, success) {
+                    GM_xmlhttpRequest({
+                        method: "GET",
+                        url: "https://gest-hordes2.eragaming.fr/?reset=",
+                        onload: function(response){
+                            if(response.status === 200) {
+                                // Si la réponse est OK, on met à jour le texte
+                                btn.innerHTML = parseButtonDisplay(success);
+                                updateFata(btn, error, success);
+                                GM_setValue(gmGhUpdatedKey, true);
+                            } else {
+                                // Sinon, on affiche une erreur
+                                btn.innerHTML = parseButtonDisplay(error);
+                                updateFata(btn, error, success);
+                                console.log(response);
+                            }
+                        }
+                    })
+                }
+
+                let updateFata = function (btn, error, success) {
+                    GM_xmlhttpRequest({
+                        method: "POST",
+                        url: "https://fatamorgana.md26.eu/map/updatemyzone?key=" + user_key,
+                        onload: function(response) {
+                            if(response.status === 200) {
+                                // Si la réponse est OK, on met à jour le texte
+                                let full_success = success.splice(0, 2);
+                                full_success.push(fata_success_text);
+                                btn.innerHTML = parseButtonDisplay(full_success);
+                                GM_setValue(gmFataUpdatedKey, true);
+                            } else {
+                                // Sinon, on affiche une erreur
+                                let full_error = error.splice(0, 2);
+                                full_error.push(fata_error_text);
+                                btn.innerHTML = parseButtonDisplay(full_error);
+                                console.log(response);
+                            }
+                        }
+                    })
+                }
+
                 let createButton = function() {
                     let btn = document.createElement("button");
 
@@ -104,7 +167,7 @@
                         let bbh_data = bbh_key_url + user_key + bbh_sid_url + bbh_sid;
                         let bbh_url = bbh_update_url + bbh_data;
 
-                        btn.innerHTML = updating_text;
+                        btn.innerHTML = bbh_pending_text;
                         GM_xmlhttpRequest({
                             method: "POST",
                             headers: {
@@ -115,46 +178,18 @@
                             onload: function(response){
                                 if(response.responseText.indexOf("code=\"ok\"") > -1) {
                                     // Si la réponse est OK, on met à jour le texte
-                                    btn.innerHTML = bbh_success_gh_pending_text;
+                                    btn.innerHTML = parseButtonDisplay([bbh_success_text, gh_pending_text]);
                                     GM_setValue(gmBbhUpdatedKey, true);
 
                                     // Puis on met à jour GH
-                                    GM_xmlhttpRequest({
-                                        method: "GET",
-                                        url: "https://gest-hordes2.eragaming.fr/?reset=",
-                                        onload: function(response){
-                                            if(response.status === 200) {
-                                                // Si la réponse est OK, on met à jour le texte
-                                                btn.innerHTML = both_updated_text;
-                                                GM_setValue(gmGhUpdatedKey, true);
-                                            } else {
-                                                // Sinon, on affiche une erreur
-                                                btn.innerHTML = only_bbh_updated_text;
-                                                console.log(response);
-                                            }
-                                        }
-                                    })
+                                    updateGh(btn, [bbh_success_text, gh_error_text, fata_pending_text], [bbh_success_text, gh_success_text, fata_pending_text]);
                                 } else {
                                     // Sinon on affiche une erreur
-                                    btn.innerHTML = bbh_error_gh_pending_text;
+                                    btn.innerHTML = parseButtonDisplay([bbh_error_text, gh_pending_text]);
                                     console.error(response);
 
                                     // On met à jour GH
-                                    GM_xmlhttpRequest({
-                                        method: "GET",
-                                        url: "https://gest-hordes2.eragaming.fr/?reset=",
-                                        onload: function(response){
-                                            if(response.status === 200) {
-                                                // Si la réponse est OK, on met à jour le texte
-                                                btn.innerHTML = only_gh_updated_text;
-                                                GM_setValue(gmGhUpdatedKey, true);
-                                            } else {
-                                                // Sinon, on affiche une erreur
-                                                btn.innerHTML = both_error_text;
-                                                console.log(response);
-                                            }
-                                        }
-                                    })
+                                    updateGh(btn, [bbh_error_text, gh_error_text, fata_pending_text], [bbh_error_text, gh_success_text, fata_pending_text]);
                                 }
                             }
                         })
@@ -180,7 +215,7 @@
                     help_button.appendChild(help_tooltip);
 
                     help_button.addEventListener("mouseenter", function() {
-                    help_tooltip.setAttribute("style", "display: block; text-transform: initial");
+                        help_tooltip.setAttribute("style", "display: block; text-transform: initial");
                     })
                     help_button.addEventListener("mouseleave", function() {
                         help_tooltip.setAttribute("style", "display: none");
@@ -222,6 +257,7 @@
                                 } else {
                                     // Si la mise à jour est un échec, alors on affiche l'erreur dans le bouton
                                     keysend.innerHTML = error_icon + parseErrorResponse(response);
+                                    updateGh(keysend, [send_key_error_text, gh_error_text, fata_pending_text], [send_key_error_text, gh_success_text, fata_pending_text]);
                                     console.log(response);
                                 }
                             }
