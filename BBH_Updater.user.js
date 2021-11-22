@@ -2,7 +2,7 @@
 // @name         BBH, GH & Fata Updater
 // @description  Update BBH, GH & Fata
 // @author       Zerah
-// @version      2.0
+// @version      2.1
 // @match        https://zombvival.de/myhordes/*
 // @match        https://myhordes.de/*
 // @match        https://myhordes.eu/*
@@ -26,10 +26,10 @@
     const gmGhUpdatedKey = "gh_updated";
     const gmFataUpdatedKey = "fata_updated";
 
-    const start_icon = "<img src='/myhordes/build/images/emotes/arrowright.7870eca6.gif'/>";
-    const success_icon = "<img src='/myhordes/build/images/professions/hero.0cdc29a3.gif'/>"
-    const pending_icon = "<img src='/myhordes/build/images/emotes/middot.d673b4c1.gif'/>"
-    const error_icon = "<img src='/myhordes/build/images/emotes/warning.8e2e7b6f.gif'/>";
+    const start_icon = "<img src='/build/images/emotes/arrowright.7870eca6.gif'/>";
+    const success_icon = "<img src='/build/images/professions/hero.0cdc29a3.gif'/>"
+    const pending_icon = "<img src='/build/images/emotes/middot.d673b4c1.gif'/>"
+    const error_icon = "<img src='/build/images/emotes/warning.8e2e7b6f.gif'/>";
 
     const title = "BBH, GH & Fata Updater ";
     const need_update_text = start_icon + "Mettre à jour BBH, GH & Fata";
