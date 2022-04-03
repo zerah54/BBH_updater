@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         BBH, GH & Fata Updater
-// @description  Update BBH, GH & Fata
+// @name         BBH, GH & Fata Updater -> Remplacé par MyHordes Optimizer
+// @description  Update BBH, GH & Fata - Ce script ne sera plus mis à jour. Il est remplacé par MyHordes Updater (https://myhordes-optimizer.web.app/script)
 // @author       Zerah
-// @version      2.1
+// @version      2.2
 // @match        https://zombvival.de/myhordes/*
 // @match        https://myhordes.de/*
 // @match        https://myhordes.eu/*
@@ -10,16 +10,14 @@
 // @match        https://bbh.fred26.fr/*
 // @match        https://gest-hordes2.eragaming.fr/*
 // @match        https://fatamorgana.md26.eu/*
-// @require      http://userscripts-mirror.org/scripts/source/107941.user.js
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_info
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 (function() {
     "use strict";
-    let bbh_updated = false;
-    let gh_updated = false;
 
     const gmUserKey = "user_key";
     const gmBbhUpdatedKey = "bbh_updated";
@@ -70,6 +68,17 @@
             }
         });
     } else {
+        /** Affiche le changelog de la version au premier chargement après la mise à jour */
+        let version = GM_getValue('version');
+        if (!version || !version[GM_info.script.version]) {
+            if (!version) {
+                version = {};
+            }
+
+            version[GM_info.script.version] = confirm(`Ce script ne sera plus mis à jour, il est remplacé par MyHordes Optimizer (https://myhordes-optimizer.web.app/script) qui contient cette fonctionnalité et bien d'autres !`);
+            GM_setValue('version', version);
+        }
+        
         setInterval(() => {
             const zone_marker = document.getElementById("zone-marker");
             if (zone_marker) {
@@ -117,7 +126,7 @@
                 let updateGh = function (btn, error, success) {
                     GM_xmlhttpRequest({
                         method: "GET",
-                        url: "https://gest-hordes2.eragaming.fr/?reset=",
+                        url: "https://gest-hordes2.eragaming.fr/map",
                         onload: function(response){
                             if(response.status === 200) {
                                 // Si la réponse est OK, on met à jour le texte
